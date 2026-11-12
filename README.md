@@ -1,75 +1,34 @@
-# 选择你的江湖命格
+# 测试合集 · TEST SUITE
 
-一个纯静态的单页 H5 答题测试站：8 道直觉选择题，测出你的江湖命格，结果页带八维雷达图、选择分布，并支持一键复制文案与生成 2:3 分享长图。
+一个纯静态的小测试集合，每个测试放在独立文件夹里，后续可以继续新增。
 
-视觉是淡水墨国风：米白宣纸底、墨灰文字、青灰与赭石点缀，低饱和、无花哨动效。
+## 当前内容
 
-## 效果预览
-
-| 封面 | 答题 | 结果 | 保存到手机 | 分享长图 |
-| --- | --- | --- | --- | --- |
-| ![封面](preview/cover.jpg) | ![答题](preview/quiz.jpg) | ![结果](preview/result.jpg) | ![保存](preview/save.jpg) | ![分享图](preview/poster.jpg) |
-
-## 目录结构
-
-```
-.
-├── index.html                # 页面骨架（封面 / 答题 / 结果三个 section）
-├── style.css                 # 全部样式，配色集中在 :root 变量里
-├── app.js                    # 题库、命格、计分、雷达图、分享图生成
-├── vendor/
-│   └── chart.umd.min.js      # Chart.js 4.4.1（本地内嵌，不走 CDN）
-└── preview/                  # 效果预览图（部署时可留可删）
-```
-
-没有任何构建步骤、没有后端、页面运行时不会发起任何外部请求，双击 `index.html` 就能跑。
-
-## 本地预览
-
-```bash
-# 方式一：直接打开 index.html
-# 方式二：起一个静态服务器（推荐，避免个别浏览器的 file:// 限制）
-python -m http.server 8080
-# 然后访问 http://localhost:8080
-```
-
-## 部署到 GitHub Pages
-
-1. 把整个目录推到仓库（`main` 分支根目录即可）。
-2. 仓库 → Settings → Pages → Source 选 `Deploy from a branch`，分支选 `main`、目录选 `/ (root)`。
-3. 等一两分钟，访问 `https://<用户名>.github.io/<仓库名>/`。
-
-体积参考：HTML + CSS + JS 约 60 KB，Chart.js 约 205 KB，首次加载后会被缓存。
-
-## 怎么改（都集中在 `app.js` 顶部）
-
-| 想改什么 | 改哪里 | 说明 |
+| 路径 | 测试 | 说明 |
 | --- | --- | --- |
-| 八个维度 | `DIMS` | 顺序就是雷达图顺时针顺序 |
-| 命格文案 | `RANKS` | `name` 名称、`slogan` 小标题、`desc` 长解读、`seal` 印章字 |
-| 命格八维画像 | `RANKS[].profile` | 每维 1~5 分，雷达图基准 + 结果匹配都用它 |
-| 题目 | `QUESTIONS` | `title` 题干，`options` 四个选项 |
-| 选项加分 | `QUESTIONS[].options[].scores` | 只写要加的维度，如 `{ 洒脱: 3, 随性: 2 }` |
-| 选项偏向的命格 | `QUESTIONS[].options[].rank` | 填命格 id；也支持数组（如第 7 题 A 同时算医者和说书人） |
-| 匹配权重 | `MATCH_WEIGHTS` | 默认命格票 55% + 八维画像相似度 45% |
-| 已测试人数 | `MOCK` | 纯前端假数据；接真实接口时替换 `fakeTestedCount()` 的返回值即可 |
+| `cat-archive/` | 猫格档案馆 | 12 道题，测测你是哪种猫；口令 `1990` |
 
-改完题库不用动任何逻辑：票数上限（`RANK_ATTAIN`）会自动按题库统计。
+根目录的 `index.html` 是测试入口页，会链接到各个测试。
 
-## 交互与细节
+## 部署
 
-- **答题**：每题单选，**选完不跳题**（可以改选项），点「下一题 / 查看命格」才继续；第一题与未作答时按钮是禁用态。
-- **键盘**：`←` `→` 切题，`1`~`4` 直接选。
-- **结果**：命格大标题 + slogan + 长解读 + 八维雷达图（Chart.js）+ 八维偏向 + 本次选择分布。
-- **复制文字**：优先 `navigator.clipboard`，不可用时回落到 `textarea + execCommand`。
-- **保存图片**：
-  - 结果页出现 0.65s 后在后台先把 1080×1620（2:3）长图画好并缓存，点按钮几乎瞬间出图；
-  - **手机 / 平板 / 微信**：弹出大图浮层，**长按图片即可保存到相册**（iPhone 选「存储到照片」，微信选「保存图片」）；支持系统分享的浏览器（iOS Safari、Android Chrome）还会多一个「用系统面板保存 / 分享」按钮，可以直接存相册或发小红书；
-  - **桌面浏览器**：直接下载 PNG。
-  - 之所以不靠 `<a download>`：iOS Safari 和微信内置浏览器会直接忽略 blob 下载，用户会遇到「点了没反应」。
-- **动效**：只有淡入淡出与进度条过渡，并尊重系统「减弱动态效果」设置。
+### Cloudflare Pages
 
-## 说明
+- 连接本仓库
+- Production branch：`main`
+- Framework preset：`None`
+- Build command：留空
+- Build output directory：`/`
 
-- 「已测试人数」和「本次选择分布」都是前端算出来的展示数据；分布是用你的答题结果 + 命格画像相似度换算的相对占比，不代表真实人群统计。
-- Chart.js 为本地文件，未做 CDN 外链，离线可用。
+根目录的 `index.html` 会作为站点入口，`cat-archive/` 是其中一个测试。
+
+### GitHub Pages
+
+推送到 `main`，在仓库 Settings → Pages 选择 `main` / `/(root)`。根目录已经放了 `.nojekyll`，可以直接访问。
+
+## 新增测试
+
+1. 在根目录新建一个英文文件夹，例如 `next-test/`
+2. 放入该测试自己的 `index.html` 和静态资源
+3. 在根目录 `index.html` 的列表中加一张入口卡片
+4. 推送后 Cloudflare Pages 会自动重新部署
