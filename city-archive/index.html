@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#F4EBDD" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>哪座城装得下你 · 城格档案馆</title>
+    <meta
+      name="description"
+      content="12 道关于生活节奏、烟火气和野心的题，测出真正适合你长期居住的城市。成都、上海、北京、大理、广州、杭州、厦门、西安，你的城格是哪一座？"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="哪座城，装得下你？" />
+    <meta property="og:description" content="不是旅游攻略，是一次长期居住的灵魂适配。12 道题，领走你的城格档案。" />
+    <meta property="og:image" content="preview/cover.jpg" />
+    <meta property="og:image:width" content="780" />
+    <meta property="og:image:height" content="1688" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="哪座城，装得下你？" />
+    <meta name="twitter:description" content="不是旅游攻略，是一次长期居住的灵魂适配。12 道题，领走你的城格档案。" />
+    <meta name="twitter:image" content="preview/cover.jpg" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23233F6B'/%3E%3Cpath d='M32 12c-9 0-16 7-16 16 0 12 16 25 16 25s16-13 16-25c0-9-7-16-16-16Z' fill='%23F4EBDD'/%3E%3Ccircle cx='32' cy='28' r='5' fill='%23E5543D'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="page-stamp page-stamp--left" aria-hidden="true">CITY<br />ARCHIVE</div>
+    <div class="page-stamp page-stamp--right" aria-hidden="true">NO.<br />02</div>
+
+    <main id="app" class="app-shell">
+      <!-- 〇 · 入城口令 -->
+      <section class="screen screen--gate is-active" id="screen-gate" aria-label="输入入城口令">
+        <div class="gate-top">
+          <a class="wordmark" href="./" aria-label="城格档案馆首页">
+            <span>CITY ARCHIVE</span>
+            <em>城格档案馆</em>
+          </a>
+          <span class="edition">NO.02</span>
+        </div>
+
+        <div class="gate-card">
+          <div class="gate-city" id="gate-city" aria-hidden="true"></div>
+          <p class="kicker"><span></span>入城凭证<span></span></p>
+          <h1 class="gate-title">对暗号，<br /><em>才准进城。</em></h1>
+          <p class="gate-copy">请输入分享者给你的 4 位入城口令</p>
+
+          <form id="gate-form" novalidate>
+            <label class="sr-only" for="gate-input">4 位入城口令</label>
+            <div class="pin-field" id="pin-field">
+              <span class="pin-box" data-pin="0"></span>
+              <span class="pin-box" data-pin="1"></span>
+              <span class="pin-box" data-pin="2"></span>
+              <span class="pin-box" data-pin="3"></span>
+              <input
+                class="pin-input"
+                id="gate-input"
+                type="text"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                maxlength="4"
+                autocomplete="off"
+                autocapitalize="off"
+                autocorrect="off"
+                spellcheck="false"
+                aria-describedby="gate-error"
+              />
+            </div>
+            <p class="gate-error" id="gate-error" role="alert" aria-live="polite"></p>
+            <button class="btn btn--primary btn--gate" id="gate-submit" type="submit">
+              <span>开门进城</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </form>
+
+          <p class="gate-foot">一次输入，本次有效 · 不收集位置信息</p>
+        </div>
+
+        <p class="gate-bottom">FIND YOUR COORDINATES.</p>
+      </section>
+
+      <!-- 一 · 封面 -->
+      <section class="screen screen--cover" id="screen-cover" aria-label="城格测试封面">
+        <header class="site-nav">
+          <a class="wordmark" href="./">
+            <span>CITY ARCHIVE</span>
+            <em>城格档案馆</em>
+          </a>
+          <span class="nav-chip">VOL. 02</span>
+        </header>
+
+        <div class="cover-heading">
+          <p class="kicker"><span></span>今日份城格鉴定</p>
+          <h1 class="cover-title">
+            <span>哪座城，</span>
+            <strong>装得下你</strong><span class="title-q" aria-hidden="true">?</span>
+          </h1>
+          <p class="cover-deck">不是旅游攻略，<br />是一次长期居住的灵魂适配。</p>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-grid" aria-hidden="true"></div>
+          <div class="hero-city" id="hero-city"></div>
+          <span class="hero-tape" aria-hidden="true">WHERE<br />TO?</span>
+          <div class="hero-sticker" aria-hidden="true">
+            <span>CITY PASS</span>
+            <strong>02</strong>
+          </div>
+          <div class="hero-note" aria-hidden="true">坐标待定<br />正在匹配</div>
+          <div class="hero-caption">
+            <span>YOUR CITY</span>
+            <span>COORDINATE ?</span>
+          </div>
+        </div>
+
+        <button class="btn btn--primary btn--start" id="btn-start" type="button">
+          <span>开始测城</span>
+          <span class="btn-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <div class="cover-meta" aria-label="测试信息">
+          <span><b>12</b> 道直觉题</span>
+          <span class="meta-dot" aria-hidden="true"></span>
+          <span>约 <b>2</b> 分钟</span>
+          <span class="meta-dot" aria-hidden="true"></span>
+          <span>仅供娱乐</span>
+        </div>
+        <p class="cover-social">已有 <b id="city-count">9,742</b> 个城市动物找到坐标</p>
+
+        <footer class="site-footer">
+          <span>CITY ARCHIVE © 2026</span>
+          <span>本馆不提供导航服务</span>
+        </footer>
+      </section>
+
+      <!-- 二 · 答题 -->
+      <section class="screen screen--quiz" id="screen-quiz" aria-label="答题">
+        <header class="quiz-top">
+          <button class="icon-btn" id="btn-quit" type="button" aria-label="退出测试，返回封面">←</button>
+          <span class="quiz-brand">CITY ARCHIVE</span>
+          <span class="quiz-count"><b id="quiz-current">01</b><i>/ 12</i></span>
+        </header>
+
+        <div
+          class="progress"
+          id="progress"
+          role="progressbar"
+          aria-label="答题进度"
+          aria-valuemin="0"
+          aria-valuemax="12"
+          aria-valuenow="0"
+        >
+          <i id="progress-fill"></i>
+        </div>
+
+        <div class="quiz-card" id="quiz-card">
+          <div class="q-meta">
+            <span class="q-scene" id="q-scene">偷来的假日</span>
+            <span class="q-number">Q.<b id="q-number">01</b></span>
+          </div>
+          <h2 class="q-title" id="q-title"></h2>
+          <div class="options" id="options" role="radiogroup" aria-labelledby="q-title"></div>
+        </div>
+
+        <nav class="quiz-nav" aria-label="答题操作">
+          <button class="btn-text" id="btn-prev" type="button">← 上一题</button>
+          <button class="btn btn--primary" id="btn-next" type="button" disabled>
+            <span>下一题</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </nav>
+        <p class="quiz-hint">凭第一反应选，别想太久</p>
+      </section>
+
+      <!-- 三 · 匹配中 -->
+      <section class="screen screen--loading" id="screen-loading" aria-label="正在匹配城市">
+        <div class="loading-poster">
+          <div class="loading-city" id="loading-city" aria-hidden="true"></div>
+          <div class="loading-scan" aria-hidden="true"></div>
+        </div>
+        <p class="loading-title">正在为你匹配城市坐标<span class="typing-dots" aria-hidden="true">...</span></p>
+        <p class="loading-sub" id="loading-sub">先测量一下你的生活半径</p>
+        <div class="loading-bar" aria-hidden="true"><i></i></div>
+      </section>
+
+      <!-- 四 · 结果 -->
+      <section class="screen screen--result" id="screen-result" aria-label="测试结果">
+        <header class="result-nav">
+          <a class="wordmark" href="./">
+            <span>CITY ARCHIVE</span>
+            <em>城格档案</em>
+          </a>
+          <button class="nav-chip nav-chip--button" id="btn-result-save" type="button">保存城格图</button>
+        </header>
+
+        <div class="result-wrap">
+          <article class="city-file" id="result-card">
+            <header class="file-top">
+              <span>CITY FILE / 城格档案</span>
+              <span id="file-no">NO. 02-0001</span>
+            </header>
+
+            <div class="result-hero">
+              <div class="result-art" id="result-art" aria-hidden="true"></div>
+              <div class="result-heading">
+                <p class="result-kicker">YOUR CITY TYPE</p>
+                <p class="result-lead">你的城格是</p>
+                <h1 id="result-name">成都</h1>
+                <p class="result-title" id="result-title">巴适生活家</p>
+              </div>
+              <div class="match-stamp" aria-label="城格匹配度">
+                <strong id="match-value">91</strong>
+                <span><i>%</i>匹配</span>
+              </div>
+              <p class="result-en" id="result-en">CHENGDU · CD-01</p>
+            </div>
+
+            <div class="result-body">
+              <blockquote class="result-quote" id="result-quote">「慢一点，日子才跟得上。」</blockquote>
+              <p class="result-desc" id="result-desc"></p>
+              <ul class="tag-list" id="result-tags" aria-label="城格标签"></ul>
+
+              <div class="area-line">
+                <span>参考生活半径</span>
+                <strong id="area-text">玉林 / 望平街 / 麓湖</strong>
+              </div>
+
+              <div class="result-actions">
+                <button class="btn btn--primary" id="btn-save" type="button">
+                  <span>保存城格图</span>
+                  <span class="btn-arrow" aria-hidden="true">↓</span>
+                </button>
+                <button class="btn btn--outline" id="btn-copy" type="button">复制文案</button>
+              </div>
+              <p class="save-note">1080 × 1620 高清城市档案 · 小红书 / 朋友圈可用</p>
+
+              <section class="file-section">
+                <h3 class="section-title"><span>01</span>城格雷达<em>CITY SPECTRUM</em></h3>
+                <div class="radar-wrap">
+                  <svg id="radar" viewBox="0 0 360 350" role="img" aria-label="六维城格雷达图"></svg>
+                </div>
+                <ul class="dim-list" id="dim-list"></ul>
+              </section>
+
+              <section class="file-section">
+                <h3 class="section-title"><span>02</span>城格成分<em>CITY MIX</em></h3>
+                <div class="type-bars" id="type-bars"></div>
+                <p class="section-note">你身上不只有一座城，只是这座最像你。</p>
+              </section>
+
+              <section class="file-section file-section--split">
+                <div class="mini-card">
+                  <h4>你需要的日常 <span>DAILY</span></h4>
+                  <p id="daily-text"></p>
+                </div>
+                <div class="mini-card mini-card--tint">
+                  <h4>周末充电 <span>RECHARGE</span></h4>
+                  <p id="recharge-text"></p>
+                </div>
+              </section>
+
+              <section class="file-section">
+                <h3 class="section-title"><span>03</span>城市天赋与盲点<em>SUPERPOWER</em></h3>
+                <ul class="strength-list" id="strength-list"></ul>
+                <p class="blind-spot" id="blind-text"></p>
+              </section>
+
+              <section class="file-section">
+                <h3 class="section-title"><span>04</span>宜居说明书<em>HOW TO LIVE</em></h3>
+                <ol class="care-list" id="care-list"></ol>
+              </section>
+
+              <section class="file-section">
+                <h3 class="section-title"><span>05</span>城市关系<em>CITY MATCH</em></h3>
+                <div class="compat-grid">
+                  <div class="compat-card">
+                    <div class="compat-head">
+                      <span class="compat-label">最佳城市搭子</span>
+                      <span class="compat-art" id="best-art"></span>
+                    </div>
+                    <p class="compat-name" id="best-name"></p>
+                    <p class="compat-why" id="best-why"></p>
+                  </div>
+                  <div class="compat-card compat-card--warn">
+                    <div class="compat-head">
+                      <span class="compat-label">容易水土不服</span>
+                      <span class="compat-art" id="clash-art"></span>
+                    </div>
+                    <p class="compat-name" id="clash-name"></p>
+                    <p class="compat-why" id="clash-why"></p>
+                  </div>
+                </div>
+              </section>
+
+              <div class="rarity-line">
+                <span>同类占比</span>
+                <strong id="rarity">13.4%</strong>
+                <span>的城市动物是这个城格</span>
+              </div>
+
+              <footer class="file-footer">
+                <div>
+                  <span>城格档案馆</span>
+                  <b>CITY ARCHIVE · 2026</b>
+                </div>
+                <span class="file-seal">已<br />抵<br />达</span>
+              </footer>
+            </div>
+          </article>
+        </div>
+
+        <div class="result-bottom">
+          <button class="btn btn--outline" id="btn-restart" type="button">再测一次</button>
+          <button class="btn-text" id="btn-home" type="button">回到封面</button>
+        </div>
+        <p class="disclaimer">仅供娱乐 · 你的城格由你本人最终解释</p>
+      </section>
+    </main>
+
+    <!-- 海报预览 / 保存 -->
+    <div class="poster-modal" id="poster-modal" aria-hidden="true">
+      <div class="poster-backdrop" data-close-poster></div>
+      <div class="poster-sheet" role="dialog" aria-modal="true" aria-labelledby="poster-title">
+        <header class="poster-head">
+          <div>
+            <p>YOUR CITY FILE</p>
+            <h2 id="poster-title">长按图片，保存到相册</h2>
+          </div>
+          <button class="close-btn" id="btn-close-poster" type="button" aria-label="关闭">×</button>
+        </header>
+        <div class="poster-preview" id="poster-preview">
+          <div class="poster-loading" id="poster-loading">
+            <span></span>
+            正在冲印城格档案…
+          </div>
+          <img id="poster-img" alt="我的城格测试结果海报" />
+        </div>
+        <p class="poster-tip">iPhone：长按图片 →「存储到照片」<br />Android：长按图片 →「保存图片」，或点下方按钮</p>
+        <div class="poster-actions">
+          <button class="btn btn--primary" id="btn-poster-save" type="button">保存到相册</button>
+          <button class="btn btn--outline" id="btn-poster-close" type="button">完成</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="data.js" defer></script>
+    <script src="scoring.js" defer></script>
+    <script src="art.js" defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>

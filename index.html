@@ -138,6 +138,10 @@
         height: 1px;
         background: rgba(45, 39, 35, 0.18);
       }
+      .test-list {
+        display: grid;
+        gap: 14px;
+      }
       .test-card {
         display: grid;
         grid-template-columns: 110px 1fr 34px;
@@ -170,6 +174,12 @@
         height: 100%;
         object-fit: cover;
         object-position: center 32%;
+      }
+      .thumb--city {
+        background: var(--navy, #233f6b);
+      }
+      .thumb--city img {
+        object-position: center 50%;
       }
       .test-info {
         min-width: 0;
@@ -235,7 +245,7 @@
     <main class="wrap">
       <header class="top">
         <div class="brand"><b>TEST SUITE</b><span>测试合集</span></div>
-        <span class="issue">VOL. 01</span>
+        <span class="issue">VOL. 02</span>
       </header>
 
       <section class="heading">
@@ -244,20 +254,31 @@
         <p class="lead">不负责准确，只负责让你多认识自己一点点。<br />新的测试会陆续收进来。</p>
       </section>
 
-      <p class="list-label">OPEN FILE / 可进入</p>
-      <a class="test-card" href="cat-archive/">
-        <span class="thumb"><img src="cat-archive/preview/cover.jpg" alt="猫格档案馆封面" /></span>
-        <span class="test-info">
-          <small>NO. 01 / 性格测试</small>
-          <h2>猫格档案馆</h2>
-          <p>12 道题，测测你是哪种猫</p>
-        </span>
-        <span class="arrow" aria-hidden="true">→</span>
-      </a>
+      <p class="list-label">OPEN FILES / 可进入</p>
+      <div class="test-list">
+        <a class="test-card" href="cat-archive/">
+          <span class="thumb"><img src="cat-archive/preview/cover.jpg" alt="猫格档案馆封面" /></span>
+          <span class="test-info">
+            <small>NO. 01 / 性格测试</small>
+            <h2>猫格档案馆</h2>
+            <p>12 道题，测测你是哪种猫</p>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="test-card" href="city-archive/">
+          <span class="thumb thumb--city"><img src="city-archive/preview/thumb.jpg" alt="城格档案馆封面" /></span>
+          <span class="test-info">
+            <small>NO. 02 / 城市测试</small>
+            <h2>城格档案馆</h2>
+            <p>12 道题，测测哪座城装得下你</p>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
 
       <footer>
         <span>TEST SUITE © 2026</span>
-        <span>持续收集中</span>
+        <span>2 FILES / 持续收集中</span>
       </footer>
     </main>
   </body>

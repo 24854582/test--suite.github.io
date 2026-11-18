@@ -7,6 +7,7 @@
 | 路径 | 测试 | 说明 |
 | --- | --- | --- |
 | `cat-archive/` | 猫格档案馆 | 12 道题，测测你是哪种猫；口令 `1990` |
+| `city-archive/` | 城格档案馆 | 12 道题，测测哪座城装得下你；口令 `1990` |
 
 根目录的 `index.html` 是测试入口页，会链接到各个测试。
 
@@ -20,7 +21,7 @@
 - Build command：留空
 - Build output directory：`/`
 
-根目录的 `index.html` 会作为站点入口，`cat-archive/` 是其中一个测试。
+根目录的 `index.html` 会作为站点入口，`cat-archive/` 和 `city-archive/` 是其中两个测试。
 
 ### GitHub Pages
 
