@@ -1261,6 +1261,10 @@ a {
   line-height: 1.02;
   letter-spacing: -0.065em;
 }
+.result-heading h1.is-long {
+  font-size: clamp(50px, 14vw, 78px);
+  letter-spacing: -0.08em;
+}
 .result-title {
   margin: 0;
   font-family: var(--display);
@@ -2038,6 +2042,9 @@ a {
   .result-heading h1 {
     font-size: 74px;
   }
+  .result-heading h1.is-long {
+    font-size: 54px;
+  }
   .result-art {
     width: 58%;
   }
@@ -2082,6 +2089,9 @@ a {
   }
   .result-heading h1 {
     font-size: 112px;
+  }
+  .result-heading h1.is-long {
+    font-size: 86px;
   }
   .result-art {
     width: 258px;

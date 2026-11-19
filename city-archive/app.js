@@ -514,6 +514,7 @@
     dom.matchValue.textContent = result.match;
     dom.fileNo.textContent = `NO. 02-${state.serial}`;
     dom.resultName.textContent = type.name;
+    dom.resultName.classList.toggle('is-long', type.name.length >= 3);
     dom.resultTitle.textContent = type.title;
     dom.resultEn.textContent = `${type.en} · ${type.code}`;
     dom.resultQuote.textContent = `「${type.quote}」`;
@@ -539,11 +540,11 @@
       `;
     }).join('');
 
-    const topShare = result.shares[0] ? result.shares[0].share : 1;
+    const topAffinity = Math.max.apply(null, result.shares.map((item) => item.score || 1));
     dom.typeBars.innerHTML = result.shares
       .map((item, index) => {
-        const pct = Math.max(1, Math.round(item.share * 100));
-        const width = Math.max(6, Math.round((item.share / topShare) * 100));
+        const pct = Math.max(1, Math.min(98, Math.round(item.score || 0)));
+        const width = Math.max(6, Math.round(((item.score || 0) / topAffinity) * 100));
         return `
           <div class="type-bar">
             <span class="type-rank">0${index + 1}</span>
@@ -1054,15 +1055,15 @@
     ctx.lineTo(540, 1374);
     ctx.stroke();
 
-    // 城格成分
+    // 城市相性
     ctx.fillStyle = INK;
     setFont(ctx, 800, 22, FONT_SANS);
-    ctx.fillText('城格成分', 574, 978);
+    ctx.fillText('城市相性', 574, 978);
     setFont(ctx, 600, 11, FONT_MONO);
     ctx.fillStyle = 'rgba(45,39,35,.45)';
-    drawTracking(ctx, 'CITY MIX', 679, 976, 1.8);
+    drawTracking(ctx, 'CITY AFFINITY', 679, 976, 1.8);
 
-    const topShare = result.shares[0] ? result.shares[0].share : 1;
+    const topAffinity = Math.max.apply(null, result.shares.map((item) => item.score || 1));
     result.shares.forEach((item, index) => {
       const y = 1040 + index * 84;
       ctx.fillStyle = 'rgba(45,39,35,.45)';
@@ -1071,8 +1072,8 @@
       ctx.fillStyle = INK;
       setFont(ctx, 700, 19, FONT_SANS);
       ctx.fillText(item.type.name, 611, y);
-      const pct = Math.max(1, Math.round(item.share * 100));
-      const width = Math.max(8, Math.round((item.share / topShare) * 330));
+      const pct = Math.max(1, Math.min(98, Math.round(item.score || 0)));
+      const width = Math.max(8, Math.round(((item.score || 0) / topAffinity) * 330));
       fillRoundRect(ctx, 712, y - 15, 330, 16, 8, PAPER);
       strokeRoundRect(ctx, 712, y - 15, 330, 16, 8, INK, 1.3);
       if (width > 2) {

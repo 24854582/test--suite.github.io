@@ -2,8 +2,8 @@
  * 城格档案馆 · 计分
  * ------------------------------------------------------------
  * 1. 把每道题选中的维度分累加，再按该维度可取得的最高分归一化；
- * 2. 用「六维画像相似度 30% + 选项城市倾向 70%」匹配八座城；
- * 3. 生成一个 0~100 的匹配度，以及八座城的城格成分。
+ * 2. 先用六维画像匹配 8 个城格母题，再在同组城市里挑具体落点；
+ * 3. 生成一个 0~100 的匹配度，以及城市相性排序。
  *
  * 浏览器里挂到 window.CityScoring，Node 里可 require 做模拟测试。
  * ============================================================ */
@@ -77,11 +77,41 @@
     return out;
   }
 
+  function answerSeed(answers) {
+    let hash = 2166136261;
+    answers.forEach((answer, index) => {
+      hash = Math.imul(hash ^ ((answer + 1) * (index + 17)), 16777619);
+    });
+    return hash >>> 0;
+  }
+
+  function cityJitter(seed, cityId) {
+    let hash = seed;
+    for (let i = 0; i < cityId.length; i += 1) {
+      hash = Math.imul(hash ^ cityId.charCodeAt(i), 16777619);
+    }
+    return ((hash >>> 0) / 4294967295) * 20;
+  }
+
   function computeResult(answers, data) {
     const dimensions = data.dimensions;
     const typeIds = Object.keys(data.types);
+    const groupIds = Object.keys(data.groups);
     const scores = normalizeScores(answers, data.questions, dimensions);
-    const affinity = affinityScores(answers, data.questions, typeIds);
+    const affinity = affinityScores(answers, data.questions, groupIds);
+    const seed = answerSeed(answers);
+
+    const groupScores = {};
+    groupIds.forEach((id) => {
+      const group = data.groups[id];
+      let distance = 0;
+      dimensions.forEach((d) => {
+        distance += Math.abs(scores[d.key] - group.profile[d.key]);
+      });
+      distance /= dimensions.length;
+      const similarity = clamp(100 - distance * 1.42, 30, 99);
+      groupScores[id] = similarity * 0.55 + affinity[id] * 100 * 0.45;
+    });
 
     const scored = typeIds.map((id) => {
       const type = data.types[id];
@@ -91,8 +121,12 @@
       });
       distance /= dimensions.length;
       const similarity = clamp(100 - distance * 1.42, 30, 99);
-      const score = similarity * 0.3 + affinity[id] * 100 * 0.7;
-      return { id, type, similarity, affinity: affinity[id], score };
+      const groupScore = groupScores[type.group] || 50;
+      const baseScore = groupScore * 0.7 + similarity * 0.3;
+      // 同组城市的六维画像很接近，用答案生成一个稳定的城市微差，
+      // 让每座城都有机会成为那个更具体的落点，而不是被同组头部城市吃掉。
+      const score = baseScore + cityJitter(seed, id);
+      return { id, type, similarity, groupScore, baseScore, score };
     });
 
     scored.sort((a, b) => {
@@ -102,11 +136,11 @@
 
     const top = scored[0];
     // 把内部得分映射成社交测试里读起来顺眼的匹配度，但不给所有人都发 99。
-    const match = Math.round(clamp(78 + (top.score - 35) * 0.32, 78, 98));
+    const match = Math.round(clamp(72 + top.score * 0.26, 78, 98));
 
-    // 用 softmax 让八座城的成分有区分度，同时总和为 100%。
+    // 保留一份 softmax 概率分布，供调试内部排序使用。
     const maxScore = scored[0].score;
-    const weights = scored.map((item) => Math.exp((item.score - maxScore) / 24));
+    const weights = scored.map((item) => Math.exp((item.score - maxScore) / 12));
     const weightSum = weights.reduce((a, b) => a + b, 0);
     scored.forEach((item, i) => {
       item.share = weights[i] / weightSum;

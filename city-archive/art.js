@@ -1,7 +1,7 @@
 /* ============================================================
  * 城格档案馆 · 城市插画
  * ------------------------------------------------------------
- * 八座城共用一个圆形「城市徽章」骨架，用天际线、地标、山水区分。
+ * 30 座城共用一个圆形「城市徽章」骨架，用天际线、地标、山水区分。
  * 页面和结果海报共用同一份 SVG，保证保存下来的图和网页一致。
  * ============================================================ */
 (function (root) {
@@ -332,12 +332,299 @@
 
   const SCENES = { chengdu, shanghai, beijing, dali, guangzhou, hangzhou, xiamen, xian };
 
+  /* ----------------------------------------------------------
+   * 新增城市用「场景 + 地标」组合，避免 30 张插画各自从零画起。
+   * 同一套场景骨架靠配色、地标和城市名区分气质。
+   * ---------------------------------------------------------- */
+
+  function windowRows(x, y, cols, rows, fill) {
+    let out = '';
+    for (let row = 0; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        out += `<rect x="${x + col * 8}" y="${y + row * 9}" width="4" height="5" rx="1" fill="${fill}"/>`;
+      }
+    }
+    return out;
+  }
+
+  function metroScene(type) {
+    const buildings = [
+      [34, 172, 38, 92, type.color],
+      [76, 144, 30, 120, type.deep],
+      [110, 190, 45, 74, type.soft],
+      [159, 126, 32, 138, type.color],
+      [195, 166, 40, 98, type.deep],
+      [239, 198, 32, 66, type.soft],
+    ];
+    return `
+      ${commonSky(type)}
+      <path d="M18 226 Q80 214 142 226 T286 224 L286 286 L18 286 Z" fill="${type.water}" opacity=".55"/>
+      <g stroke="${INK}" stroke-width="2.6" stroke-linejoin="round">
+        ${buildings
+          .map(
+            ([x, y, w, h, fill]) => `
+              <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"/>
+              <path d="M${x} ${y + 13} h${w} M${x} ${y + 31} h${w}" stroke="${PAPER}" stroke-width="1.4" opacity=".32"/>
+              ${windowRows(x + 6, y + 18, Math.max(1, Math.floor(w / 12)), Math.min(4, Math.floor(h / 20)), type.deep)}
+            `
+          )
+          .join('')}
+      </g>
+      <g stroke="${PAPER}" stroke-width="2" fill="none" opacity=".55">
+        <path d="M46 246 q18 -5 36 0"/><path d="M146 258 q22 -6 44 0"/><path d="M224 244 q16 -5 32 0"/>
+      </g>
+    `;
+  }
+
+  function coastScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 202 Q80 191 142 202 T286 200 L286 286 L18 286 Z" fill="${type.water}" opacity=".8"/>
+      <path d="M18 246 Q70 235 128 246 T244 247 T286 245 L286 286 L18 286 Z" fill="${PAPER}" opacity=".25"/>
+      <g stroke="${PAPER}" stroke-width="2" fill="none" opacity=".55">
+        <path d="M42 220 q18 -5 36 0"/><path d="M130 238 q24 -6 48 0"/><path d="M222 214 q16 -4 32 0"/>
+      </g>
+      <g stroke="${INK}" stroke-width="2.5" stroke-linejoin="round">
+        <path d="M34 214 L78 182 L122 214 Z" fill="${type.deep}"/>
+        <rect x="45" y="213" width="66" height="42" fill="${PAPER}"/>
+        <rect x="58" y="228" width="13" height="18" fill="${type.soft}"/>
+        <rect x="83" y="228" width="13" height="18" fill="${type.soft}"/>
+        <path d="M128 214 L164 191 L200 214 Z" fill="${type.accent}"/>
+        <rect x="139" y="213" width="50" height="37" fill="${type.soft}"/>
+      </g>
+    `;
+  }
+
+  function historicScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 224 Q80 194 142 214 Q210 190 286 220 L286 286 L18 286 Z" fill="${type.deep}" opacity=".16"/>
+      <g stroke="${INK}" stroke-width="2.6" stroke-linejoin="round">
+        <path d="M26 250 L274 250 L274 280 L26 280 Z" fill="${type.deep}"/>
+        <path d="M26 250 h18 v-11 h16 v11 h18 v-11 h16 v11 h18 v-11 h16 v11 h18 v-11 h16 v11 h18 v-11 h16 v11 h18 v-11 h16 v11 h18" fill="none"/>
+        <rect x="106" y="204" width="86" height="46" fill="${type.color}"/>
+        <path d="M94 206 Q149 181 204 206 L196 218 Q149 199 102 218 Z" fill="${type.accent}"/>
+        <path d="M132 250 v-24 q18 -13 36 0 v24 Z" fill="${PAPER}"/>
+      </g>
+      <g transform="translate(42 188)" stroke="${INK}" stroke-width="2.5">
+        <path d="M-8 34 Q28 14 66 34 L59 46 Q28 31 -1 46 Z" fill="${type.deep}"/>
+        <rect x="6" y="45" width="44" height="29" fill="${type.soft}"/>
+        <path d="M18 60 h8 v14 h-8 Z M34 60 h8 v14 h-8 Z" fill="${PAPER}"/>
+      </g>
+      <g stroke="${INK}" stroke-width="1.8" fill="none" opacity=".55">
+        <path d="M68 78 q7 -6 14 0 q7 -6 14 0"/><path d="M100 63 q5 -4 10 0 q5 -4 10 0"/>
+      </g>
+    `;
+  }
+
+  function canalScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 211 Q80 202 142 211 T286 210 L286 286 L18 286 Z" fill="${type.water}" opacity=".78"/>
+      <g stroke="${INK}" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="34" y="184" width="60" height="67" fill="${PAPER}"/>
+        <path d="M24 186 L64 160 L104 186 L97 198 L64 180 L31 198 Z" fill="${type.deep}"/>
+        <rect x="162" y="176" width="70" height="75" fill="${PAPER}"/>
+        <path d="M150 178 L197 148 L244 178 L236 192 L197 170 L158 192 Z" fill="${type.deep}"/>
+        <rect x="50" y="204" width="12" height="20" fill="${type.soft}"/>
+        <rect x="70" y="204" width="12" height="20" fill="${type.soft}"/>
+        <rect x="179" y="198" width="13" height="22" fill="${type.soft}"/>
+        <rect x="201" y="198" width="13" height="22" fill="${type.soft}"/>
+      </g>
+      <g stroke="${type.deep}" stroke-width="2" fill="none" opacity=".8">
+        <path d="M30 264 q14 -9 28 0 M230 264 q14 -9 28 0"/>
+        <path d="M76 276 q20 -6 40 0 M178 278 q18 -5 36 0" stroke="${PAPER}" opacity=".7"/>
+      </g>
+    `;
+  }
+
+  function mountainScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 192 L62 118 L104 166 L146 96 L188 165 L228 126 L286 192 L286 286 L18 286 Z" fill="${type.color}" opacity=".5"/>
+      <path d="M52 134 L62 118 L74 136 L66 144 L58 140 Z M134 112 L146 96 L160 116 L151 126 L142 121 Z M218 140 L228 126 L241 144 L232 152 L224 147 Z" fill="${PAPER}" opacity=".8"/>
+      <path d="M18 218 Q80 205 142 218 T286 216 L286 286 L18 286 Z" fill="${type.water}" opacity=".72"/>
+      <g stroke="${PAPER}" stroke-width="2" fill="none" opacity=".55">
+        <path d="M52 242 q18 -5 36 0"/><path d="M148 258 q24 -6 48 0"/>
+      </g>
+      <g transform="translate(226 208)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <rect x="0" y="16" width="34" height="26" fill="${PAPER}"/>
+        <path d="M-7 17 L17 -1 L41 17 Z" fill="${type.deep}"/>
+        <rect x="12" y="26" width="9" height="16" fill="${type.soft}"/>
+      </g>
+    `;
+  }
+
+  function riverScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 196 Q82 184 146 196 T286 194 L286 286 L18 286 Z" fill="${type.water}" opacity=".76"/>
+      <path d="M18 220 Q82 208 146 220 T286 218 L286 286 L18 286 Z" fill="${type.color}" opacity=".18"/>
+      <g stroke="${PAPER}" stroke-width="2" fill="none" opacity=".65">
+        <path d="M38 238 q20 -6 40 0"/><path d="M120 252 q28 -7 56 0"/><path d="M220 236 q18 -5 36 0"/>
+      </g>
+      <g stroke="${INK}" stroke-width="2.4" stroke-linejoin="round">
+        <rect x="38" y="154" width="38" height="64" fill="${type.deep}"/>
+        <rect x="80" y="170" width="42" height="48" fill="${type.soft}"/>
+        <rect x="126" y="142" width="30" height="76" fill="${type.color}"/>
+        <rect x="160" y="178" width="38" height="40" fill="${PAPER}"/>
+        <path d="M38 170 h38 M38 186 h38 M126 158 h30 M126 174 h30" stroke="${PAPER}" stroke-width="3" opacity=".45"/>
+      </g>
+    `;
+  }
+
+  function snowScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 190 Q72 150 124 180 Q176 146 228 178 Q258 160 286 184 L286 286 L18 286 Z" fill="${PAPER}" opacity=".65"/>
+      <path d="M18 224 Q82 206 144 220 T286 216 L286 286 L18 286 Z" fill="${type.water}" opacity=".35"/>
+      <g stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <path d="M48 220 L62 180 L76 220 Z" fill="${type.deep}"/>
+        <path d="M70 232 L86 190 L102 232 Z" fill="${type.deep}"/>
+        <path d="M232 224 L245 188 L258 224 Z" fill="${type.deep}"/>
+        <path d="M54 198 l8 -8 M244 204 l8 -8" stroke="${PAPER}" stroke-width="2.5"/>
+      </g>
+      <g fill="${PAPER}" opacity=".8">
+        <circle cx="56" cy="112" r="2"/><circle cx="84" cy="92" r="1.5"/><circle cx="250" cy="116" r="2"/><circle cx="218" cy="86" r="1.3"/>
+      </g>
+    `;
+  }
+
+  function plateauScene(type) {
+    return `
+      ${commonSky(type)}
+      <path d="M18 182 L76 100 L122 164 L170 92 L218 166 L260 120 L286 186 L286 286 L18 286 Z" fill="${type.color}" opacity=".45"/>
+      <path d="M64 118 L76 100 L90 120 L80 130 L70 124 Z M158 112 L170 92 L186 116 L174 127 L164 121 Z" fill="${PAPER}" opacity=".8"/>
+      <path d="M18 232 Q82 216 146 230 T286 226 L286 286 L18 286 Z" fill="${type.soft}" opacity=".9"/>
+      <g stroke="${type.accent}" stroke-width="2" stroke-linecap="round">
+        <path d="M44 164 L44 212 M44 174 L70 170 M44 186 L18 182 M44 198 L68 194"/>
+        <path d="M44 174 h5 v5 h-5 Z M70 170 h5 v5 h-5 Z M18 182 h5 v5 h-5 Z" fill="${type.accent}" stroke="none"/>
+      </g>
+      <g stroke="${INK}" stroke-width="2" fill="none" opacity=".5">
+        <path d="M104 76 q10 -8 20 0 q10 -8 20 0"/>
+      </g>
+    `;
+  }
+
+  const GENERIC_SCENES = {
+    metro: metroScene,
+    coast: coastScene,
+    historic: historicScene,
+    canal: canalScene,
+    mountain: mountainScene,
+    river: riverScene,
+    snow: snowScene,
+    plateau: plateauScene,
+  };
+
+  const LANDMARKS = {
+    tower: (type) => `
+      <g stroke="${INK}" stroke-width="2.6" stroke-linejoin="round">
+        <rect x="218" y="106" width="28" height="126" fill="${type.color}"/>
+        <path d="M218 118 h28 M218 134 h28 M218 150 h28 M218 166 h28" stroke="${PAPER}" stroke-width="2.2" opacity=".55"/>
+        <path d="M232 106 V78" stroke-width="2.4"/>
+        <path d="M226 90 h12" stroke-width="2"/>
+      </g>`,
+    wheel: (type) => `
+      <g transform="translate(220 142)" stroke="${INK}" stroke-width="2.4" fill="none">
+        <circle cx="0" cy="0" r="48"/>
+        <circle cx="0" cy="0" r="36" opacity=".45"/>
+        <path d="M0 -48 V48 M-48 0 H48 M-34 -34 L34 34 M34 -34 L-34 34"/>
+        <circle cx="0" cy="0" r="5" fill="${type.accent}"/>
+        <path d="M-16 46 L0 0 L16 46" stroke-width="3"/>
+      </g>`,
+    bridge: (type) => `
+      <g stroke="${INK}" stroke-width="2.4" fill="none">
+        <path d="M30 218 Q150 160 270 218"/>
+        <path d="M30 218 h240"/>
+        <path d="M72 218 v-14 M118 218 v-28 M172 218 v-28 M218 218 v-14" opacity=".65"/>
+        <path d="M50 196 v22 M250 196 v22" stroke-width="3"/>
+      </g>`,
+    pagoda: (type) => `
+      <g transform="translate(218 138)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <path d="M-24 14 Q0 0 24 14 L20 21 Q0 11 -20 21 Z" fill="${type.deep}"/>
+        <path d="M-19 22 Q0 13 19 22 L16 29 Q0 21 -16 29 Z" fill="${type.deep}"/>
+        <path d="M-14 30 Q0 23 14 30 L12 38 Q0 31 -12 38 Z" fill="${type.deep}"/>
+        <rect x="-13" y="38" width="26" height="52" fill="${type.color}"/>
+        <path d="M-6 47 h12 v20 h-12 Z" fill="${PAPER}"/>
+        <path d="M0 8 v-15" stroke-width="2.2"/>
+      </g>`,
+    palace: (type) => `
+      <g transform="translate(206 140)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <rect x="0" y="20" width="58" height="74" fill="${PAPER}"/>
+        <path d="M-4 22 L29 2 L62 22 L56 32 L29 18 L2 32 Z" fill="${type.accent}"/>
+        <path d="M8 44 h10 v15 h-10 Z M28 44 h10 v15 h-10 Z M48 44 h10 v15 h-10 Z M8 66 h10 v15 h-10 Z M28 66 h10 v15 h-10 Z M48 66 h10 v15 h-10 Z" fill="${type.deep}"/>
+        <path d="M29 2 v-12" stroke-width="2"/>
+      </g>`,
+    lighthouse: (type) => `
+      <g transform="translate(224 148)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <path d="M-16 82 L-11 8 L11 8 L16 82 Z" fill="${PAPER}"/>
+        <path d="M-13 34 h26 M-14 52 h28 M-15 69 h30" stroke="${type.deep}" stroke-width="8"/>
+        <path d="M-14 6 L0 -10 L14 6 Z" fill="${type.accent}"/>
+        <path d="M0 -10 v-8" stroke-width="2"/>
+      </g>`,
+    palm: (type) => `
+      <g transform="translate(67 222)" stroke="${INK}" stroke-width="2.2">
+        <path d="M0 44 q5 -30 0 -50" fill="none"/>
+        <path d="M0 -6 q-22 -15 -32 0 q20 4 32 0Z M0 -6 q22 -17 33 -1 q-22 5 -33 1Z M0 -6 q-9 -24 7 -30 q4 20 -7 30Z" fill="#5F8C6A"/>
+        <path d="M-20 3 q8 8 16 2 M20 3 q-8 8 -16 2" fill="none" opacity=".55"/>
+      </g>`,
+    dome: (type) => `
+      <g transform="translate(218 142)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <rect x="-28" y="38" width="56" height="54" fill="${type.soft}"/>
+        <path d="M-23 38 Q0 6 23 38 Z" fill="${type.accent}"/>
+        <path d="M0 20 v-14" stroke-width="2"/>
+        <path d="M-16 54 h10 v16 h-10 Z M6 54 h10 v16 h-10 Z" fill="${type.deep}"/>
+      </g>`,
+    banyan: (type) => `
+      <g transform="translate(67 214)" stroke="${INK}" stroke-width="2.2">
+        <path d="M0 54 v-35 M0 32 q-20 -8 -32 0 M0 35 q20 -9 32 0" fill="none"/>
+        <circle cx="0" cy="16" r="28" fill="#7D9E78"/>
+        <circle cx="-25" cy="27" r="18" fill="#7D9E78"/>
+        <circle cx="26" cy="26" r="20" fill="#7D9E78"/>
+        <path d="M-26 42 q-4 14 -12 20 M28 42 q5 13 14 21" stroke-width="1.6" opacity=".55"/>
+      </g>`,
+    pavilion: (type) => `
+      <g transform="translate(218 160)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <rect x="-26" y="31" width="52" height="35" fill="${PAPER}"/>
+        <path d="M-34 33 Q0 6 34 33 L27 43 Q0 23 -27 43 Z" fill="${type.deep}"/>
+        <path d="M-20 44 h9 v21 h-9 Z M11 44 h9 v21 h-9 Z" fill="${type.soft}"/>
+        <path d="M0 8 v-14" stroke-width="2"/>
+      </g>`,
+    boat: (type) => `
+      <g transform="translate(150 245)" stroke="${INK}" stroke-width="2.2">
+        <path d="M-28 0 q28 14 56 0 L22 10 H-22 Z" fill="${PAPER}"/>
+        <path d="M0 -3 v-27 l20 23 Z" fill="${type.accent}"/>
+      </g>`,
+    flowers: (type) => `
+      <g fill="${type.accent}">
+        <circle cx="52" cy="210" r="4"/><circle cx="70" cy="201" r="3"/><circle cx="88" cy="214" r="3.4"/>
+        <circle cx="110" cy="205" r="2.6"/><circle cx="132" cy="216" r="3.2"/><circle cx="156" cy="207" r="2.6"/>
+      </g>
+      <g stroke="#5F7A4C" stroke-width="1.6">
+        <path d="M52 218 v10 M70 209 v12 M88 222 v8 M110 213 v10 M132 224 v8 M156 215 v9"/>
+      </g>`,
+    walls: (type) => `
+      <g transform="translate(166 176)" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round">
+        <path d="M-38 44 h76 v22 h-76 Z" fill="${type.color}"/>
+        <path d="M-38 44 h12 v-9 h12 v9 h12 v-9 h12 v9 h12 v-9 h12 v9 h12" fill="none"/>
+        <path d="M-2 44 v-15 q17 -12 34 0 v15 Z" fill="${PAPER}"/>
+        <path d="M-26 19 Q0 5 26 19 L20 29 Q0 19 -20 29 Z" fill="${type.deep}"/>
+      </g>`,
+  };
+
+  function genericCityScene(type) {
+    const scene = GENERIC_SCENES[type.scene] || metroScene;
+    const landmark = LANDMARKS[type.landmark];
+    return `${scene(type)}${landmark ? landmark(type) : ''}`;
+  }
+
   function citySvg(type, opts) {
     const options = opts || {};
     const size = options.size || 300;
     const uid = options.uid || type.id;
     const clipId = `city-clip-${type.id}-${uid}`;
-    const scene = SCENES[type.id] ? SCENES[type.id](type) : commonSky(type);
+    const scene = SCENES[type.id] ? SCENES[type.id](type) : genericCityScene(type);
     return `
       <svg viewBox="0 0 300 300" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${type.name}城市插画">
         <defs>
